@@ -9,22 +9,23 @@ function preload() {
   stoneimage = loadImage("stone.png");
   bananaimage = loadImage("banana.png");
 }
-
+var survivalTime = 0;
 function setup() {
   createCanvas(400, 400);
-  var survivalTime = 0;
   monkey = createSprite(50, 320, 30, 30);
   monkey.addAnimation("tas", monkeyanimation1);
   monkey.scale = 0.2;
  ground = createSprite(0, 370, 800, 10);
+  bananaGroup = new Group();
+  stoneGroup = new Group();
 }
 
 function draw() {
   background(220);
-
- // if(stoneGroup.isTouching(monkey)){
-    // monkey.scale = 0.2;
-  // }
+  text("SCORE :"+survivalTime,200,50);
+  if(stoneGroup.isTouching(monkey)){
+     monkey.scale = 0.2;
+   }
   if(gameState === PLAY){
   if(keyDown("space") && monkey.y >= 160 ){
     monkey.velocityY = -5;
@@ -32,12 +33,10 @@ function draw() {
   monkey.velocityY = monkey.velocityY + 1;
   monkey.collide(ground);
     survivalTime=Math.ceil(frameCount/frameRate()) 
-    text("Survival Time: "+ survivalTime, 100,50);
-  text("SCORE :" + score, 330, 50);
     if(bananaGroup.isTouching(monkey)){
    bananaGroup.destroyEach();
     }
-  switch (score) {
+  switch (survivalTime) {
     case 10:
       monkey.scale = 0.12;
       break;
@@ -77,5 +76,6 @@ function spawnstoneGroup() {
     stone.addImage(stoneimage);
     stone.scale = 0.2;
     stone.velocityX = -1;
+     stoneGroup.add(stone);
   }
 }
